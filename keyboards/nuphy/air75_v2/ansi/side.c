@@ -122,6 +122,7 @@ void side_rgb_refresh(void) {
         pwr_side_led_on(); // power on side LED before refresh
     }
     if (!flush_side_leds) return;
+    side_led_last_act = 0;
     side_ws2812_setleds(side_leds, SIDE_LED_NUM);
     flush_side_leds = false;
 }
@@ -280,14 +281,16 @@ void sys_sw_led_show(void) {
             g_temp = 0x00;
             b_temp = 0x80;
         }
+        if (timer_elapsed32(sys_show_timer) >= 3000) {
+            sys_show_flag = false;
+            return;
+        }
         if ((timer_elapsed32(sys_show_timer) / 500) % 2 == 0) {
             set_right_rgb(r_temp, g_temp, b_temp);
         } else {
             set_right_rgb(0x00, 0x00, 0x00);
         }
-        if (timer_elapsed32(sys_show_timer) >= 3000) {
-            sys_show_flag = false;
-        }
+
     }
 }
 
@@ -320,14 +323,15 @@ void sleep_sw_led_show(void) {
                 g_temp = 0x80;
                 break;
         }
-
+        
+        if (timer_elapsed32(sleep_show_timer) >= 3000) {
+            sleep_show_flag = false;
+            return;
+        }
         if ((timer_elapsed32(sleep_show_timer) / 500) % 2 == 0) {
             set_right_rgb(r_temp, g_temp, b_temp);
         } else {
             set_right_rgb(0x00, 0x00, 0x00);
-        }
-        if (timer_elapsed32(sleep_show_timer) >= 3000) {
-            sleep_show_flag = false;
         }
     }
 }
