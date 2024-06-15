@@ -37,6 +37,7 @@ static bool rgb_led_on  = 0;
 static bool side_led_on = 0;
 
 void clear_report_buffer_and_queue(void);
+void side_rgb_refresh(void);
 
 /** ================================================================
  * @brief   关闭USB
@@ -267,6 +268,7 @@ void led_pwr_wake_handle(void) {
     if (side_led_powered_off) {
         pwr_side_led_on();
         flush_side_leds = true;
+        side_rgb_refresh();
     }
 }
 
