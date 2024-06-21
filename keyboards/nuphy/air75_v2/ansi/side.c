@@ -589,8 +589,6 @@ void bat_led_show(void) {
         }
         if (charge_state == 0x03) { // charging, not full?
             bat_show_breath = true;
-        } else if (charge_state & 0x01) { // charging
-            dev_info.rf_battery = 100;
         }
     }
 
