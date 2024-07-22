@@ -109,7 +109,7 @@ void side_rgb_refresh(void) {
  * @param  dir: 0 - decrease, 1 - increase.
  * @note  save to eeprom.
  */
-void side_light_contol(uint8_t dir) {
+void side_light_control(uint8_t dir) {
     if (dir) {
         if (side_light > SIDE_BRIGHT_MAX) {
             return;
@@ -130,7 +130,7 @@ void side_light_contol(uint8_t dir) {
  * @param  dir: 0 - decrease, 1 - increase.
  * @note  save to eeprom.
  */
-void side_speed_contol(uint8_t dir) {
+void side_speed_control(uint8_t dir) {
     if ((side_speed) > SIDE_SPEED_MAX) (side_speed) = SIDE_SPEED_MAX / 2;
 
     if (dir) {

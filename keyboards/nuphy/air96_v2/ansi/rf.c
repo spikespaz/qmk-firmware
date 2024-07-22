@@ -241,7 +241,7 @@ void RF_Protocol_Receive(void) {
                     if (dev_info.rf_charge & 0x01) dev_info.rf_baterry = 100;
                 }
                 else {
-                    if (dev_info.rf_state != RF_INVAILD) {
+                    if (dev_info.rf_state != RF_INVALID) {
                         if (error_cnt >= 5) {
                             error_cnt      = 0;
                             f_send_channel = 1;
@@ -520,7 +520,7 @@ void dev_sts_sync(void) {
 /**
  * @brief Uart send bytes.
  * @param Buffer data buf
- * @param Length data lenght
+ * @param Length data length
  */
 void UART_Send_Bytes(uint8_t *Buffer, uint32_t Length) {
     writePinLow(NRF_WAKEUP_PIN);
@@ -535,7 +535,7 @@ void UART_Send_Bytes(uint8_t *Buffer, uint32_t Length) {
 /**
  * @brief get checksum.
  * @param buf data buf
- * @param len data lenght
+ * @param len data length
  */
 uint8_t get_checksum(uint8_t *buf, uint8_t len) {
     uint8_t i;

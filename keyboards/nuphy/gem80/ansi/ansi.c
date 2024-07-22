@@ -83,11 +83,11 @@ void device_reset_show(void);
 void device_reset_init(void);
 void rgb_test_show(void);
 
-extern void light_speed_contol(uint8_t fast);
+extern void light_speed_control(uint8_t fast);
 extern void light_level_control(uint8_t brighten);
 extern void side_colour_control(uint8_t dir);
 extern void side_mode_control(uint8_t dir);
-extern void logo_light_speed_contol(uint8_t fast);
+extern void logo_light_speed_control(uint8_t fast);
 extern void logo_light_level_control(uint8_t brighten);
 extern void logo_side_colour_control(uint8_t dir);
 extern void logo_side_mode_control(uint8_t dir);
@@ -430,8 +430,10 @@ void m_power_on_dial_sw_scan(void)
 }
 
 /* qmk process record */
-bool process_record_user(uint16_t keycode, keyrecord_t *record)
-{
+bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
+    if(!process_record_user(keycode, record)){
+        return false;
+    }
     no_act_time = 0;
     
     switch (keycode) {
@@ -592,13 +594,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
 
         case SIDE_SPI:
             if (record->event.pressed) {
-                light_speed_contol(1);
+                light_speed_control(1);
             }
             return false;
 
         case SIDE_SPD:
             if (record->event.pressed) {
-                light_speed_contol(0);
+                light_speed_control(0);
             }
             return false;
 
@@ -624,12 +626,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
             return false;
         case LOGO_SPI:
             if (record->event.pressed) {
-                logo_light_speed_contol(1);
+                logo_light_speed_control(1);
             }
             return false;
         case LOGO_SPD:
             if (record->event.pressed) {
-                logo_light_speed_contol(0);
+                logo_light_speed_control(0);
             }
             return false;
 
@@ -744,7 +746,7 @@ void timer_pro(void) {
  */
 void m_londing_eeprom_data(void)
 {
-    eeconfig_read_user_datablock(&user_config);
+    eeconfig_read_kb_datablock(&user_config);
     if (user_config.default_brightness_flag != 0xA5) {
         rgb_matrix_sethsv(  RGB_DEFAULT_COLOUR,
                             255,
@@ -782,7 +784,7 @@ void m_londing_eeprom_data(void)
 }
 
 /* qmk keyboard post init */
-void keyboard_post_init_user(void)
+void keyboard_post_init_kb(void)
 {
     m_gpio_init();
 #if(WORK_MODE == THREE_MODE)
@@ -794,6 +796,7 @@ void keyboard_post_init_user(void)
     m_break_all_key();
     m_londing_eeprom_data();
     m_power_on_dial_sw_scan();
+    keyboard_post_init_user();
 
 #if(WORK_MODE == USB_MODE)
     rf_link_show_time = 0;
@@ -801,8 +804,11 @@ void keyboard_post_init_user(void)
 }
 
 
-bool rgb_matrix_indicators_user(void)
+bool rgb_matrix_indicators_kb(void)
 {
+    if(!rgb_matrix_indicators_user()){
+        return false;
+    }
     return true;
 }
 
@@ -817,7 +823,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max)
 }
 
 /* qmk housekeeping task */
-void housekeeping_task_user(void)
+void housekeeping_task_kb(void)
 {
     timer_pro();
 

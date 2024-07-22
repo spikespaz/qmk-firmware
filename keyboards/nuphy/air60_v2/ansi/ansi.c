@@ -87,7 +87,7 @@ extern void device_reset_show(void);
 extern void device_reset_init(void);
 extern void rgb_test_show(void);
 
-extern void light_speed_contol(uint8_t fast);
+extern void light_speed_control(uint8_t fast);
 extern void light_level_control(uint8_t brighten);
 extern void side_colour_control(uint8_t dir);
 extern void side_mode_control(uint8_t dir);
@@ -400,8 +400,12 @@ void m_power_on_dial_sw_scan(void)
 /**
  * @brief  qmk process record
  */
-bool process_record_user(uint16_t keycode, keyrecord_t *record)
-{
+// bool process_record_user(uint16_t keycode, keyrecord_t *record)
+// {
+bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
+    if(!process_record_user(keycode, record)){
+        return false;
+    }
     switch (keycode) {
         case RF_DFU:
             if (record->event.pressed) {
@@ -594,13 +598,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
 
         case SIDE_SPI:
             if (record->event.pressed) {
-                light_speed_contol(1);
+                light_speed_control(1);
             }
             return false;
 
         case SIDE_SPD:
             if (record->event.pressed) {
-                light_speed_contol(0);
+                light_speed_control(0);
             }
             return false;
 
@@ -699,7 +703,7 @@ void timer_pro(void)
  */
 void m_londing_eeprom_data(void)
 {
-    eeconfig_read_user_datablock(&user_config);
+    eeconfig_read_kb_datablock(&user_config);
     if (user_config.default_brightness_flag != 0xA5) {
         rgb_matrix_sethsv(255, 255, RGB_MATRIX_MAXIMUM_BRIGHTNESS - RGB_MATRIX_VAL_STEP * 2);
         user_config.default_brightness_flag = 0xA5;
@@ -723,7 +727,7 @@ void m_londing_eeprom_data(void)
 /**
    qmk keyboard post init
  */
-void keyboard_post_init_user(void)
+void keyboard_post_init_kb(void)
 {
     m_gpio_init();
     rf_uart_init();
@@ -733,13 +737,17 @@ void keyboard_post_init_user(void)
     m_break_all_key();
     m_londing_eeprom_data();
     m_power_on_dial_sw_scan();
+    keyboard_post_init_user();
 }
 
 /**
    rgb_matrix_indicators_user
  */
-bool rgb_matrix_indicators_user(void)
+bool rgb_matrix_indicators_kb(void)
 {
+    if(!rgb_matrix_indicators_user()){
+        return false;
+    }
     if(f_bat_num_show) {
         num_led_show();
     }
@@ -747,9 +755,9 @@ bool rgb_matrix_indicators_user(void)
 }
 
 /**
-   housekeeping_task_user
+   housekeeping_task_kb
  */
-void housekeeping_task_user(void)
+void housekeeping_task_kb(void)
 {
     timer_pro();
 

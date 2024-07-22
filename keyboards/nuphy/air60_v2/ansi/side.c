@@ -151,7 +151,7 @@ void light_level_control(uint8_t brighten)
  * @param  dir: 0 - decrease, 1 - increase.
  * @note  save to eeprom.
  */
-void light_speed_contol(uint8_t fast)
+void light_speed_control(uint8_t fast)
 {
     if ((side_speed) > LIGHT_SPEED_MAX)
         (side_speed) = LIGHT_SPEED_MAX / 2;

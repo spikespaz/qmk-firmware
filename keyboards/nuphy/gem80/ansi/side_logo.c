@@ -71,7 +71,7 @@ void logo_light_level_control(uint8_t brighten)
     eeconfig_update_user_datablock(&user_config);  
 }
 
-void logo_light_speed_contol(uint8_t fast)
+void logo_light_speed_control(uint8_t fast)
 {
     if ((logo_speed) > LIGHT_SPEED_MAX)
         (logo_speed) = LIGHT_SPEED_MAX / 2;
