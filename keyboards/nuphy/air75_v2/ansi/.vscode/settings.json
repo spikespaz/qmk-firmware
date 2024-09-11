@@ -1,0 +1,5 @@
+{ // Restored to default value because I use a different version.
+    "cmake.cmakePath": "cmake",
+    "C_Cpp.clang_format_path": "cmake-format",
+    "clangd.path": "clangd",
+}
